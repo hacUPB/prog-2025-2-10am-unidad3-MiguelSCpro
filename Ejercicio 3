@@ -1,0 +1,9 @@
+|  S   | Resultado | Comentario                                 |
+|------------------|------------------------|-----------|--------------------------------------------|
+| int + int      | int, int           | int     | Suma de enteros                            |
+| int + float    | int, float         | float   | El entero se convierte a flotante          |
+| float * float  | float, float       | float   | Multiplicación de decimales                |
+| int / int      | int, int           | float   | Siempre da un flotante                     |
+| int // float   | int, float         | float   | División entera, resultado con decimales   |
+| int + complex  | int, complex       | complex | Resultado se convierte a complejo          |
+| bool + int     | bool, int          | int     | True = 1, False = 0|

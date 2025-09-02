@@ -1,28 +1,33 @@
-# Solicitar al usuario un número entero
-Imprimir("Ingrese un número entero para generar la serie de Fibonacci:")
-Leer(num)
+'''
+num= int(input("Ingrese un numero entero:  "))
+i= 1
+while i<=15:
+    print(f"{num} x {i} = {num*i}")
+    i=i+1
+'''
 
-# Verificar si el número ingresado es válido
-Si num <= 0, entonces:
-    Imprimir("Por favor, ingrese un número entero positivo.")
-Sino si num == 1, entonces:
-    Imprimir("Serie de Fibonacci:")
-    Imprimir(0)
-Sino:
-    # Inicializar los primeros dos términos de la serie
-    a = 0
-    b = 1
-    contador = 2  # Iniciar en 2 debido a los dos primeros términos ya impresos
+'''
+num=int(input("Ingres un numero entero positivo:  "))
+while num < 0:
+    num=int(input("Ingres un numero entero positivo:  "))
+i=0
+for cont in range (1,num+1):
+            if cont % 2 == 0:
+                i+=cont
+print( f"la suma de los pares es:{i}")
+'''
 
-    # Imprimir los primeros dos términos
-    Imprimir("Serie de Fibonacci:")
-    Imprimir(a)
-    Imprimir(b)
+mensaje = "Universidad Pontificia Bolivariana"
+num=int(input("Ingres un numero entero positivo:  "))
+#imprimir el mensaje un numero de veces
+for i in range(num):
+    print(f"{i+1}. {mensaje}")
+    
 
-    # Calcular e imprimir los términos restantes
-    Mientras contador < num, hacer:
-        siguiente = a + b
-        Imprimir(siguiente)
-        a = b
-        b = siguiente
-        contador += 1
+
+
+
+
+
+        
+        

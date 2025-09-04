@@ -4,7 +4,7 @@ print("B. Configurar parámetros")
 print("C. Salir")
 
 
-opcion = input("Selecciona una opción: ")
+opcion = input("Selecciona una opción: ").upper()
 
 
 match opcion:
@@ -12,18 +12,20 @@ match opcion:
         print("Peso de maletas....")
         peso = 0
         peso_max = 23000
+        i=0
         while peso < peso_max :
-            i=0
             peso = float(input("Ingrese peso en kg: "))
             if peso > 20:
                 print("Maleta con sobrepeso")
+                costo = ((peso-20)*5)
+                print(f"el costo de abordaje de la maleta es de: {costo}$")
             elif peso < 0:
                 print("Inserte maleta a la bascula")
             else:
                 print(f"Maleta aprovada, su peso es: {peso}Kg")
-        i= peso + i
-        peso_total=i
-        print(f"El peso de carga de la aeronave es:{i} ")
+            i += peso
+            peso_total=i
+            print(f"El peso de carga de la aeronave es:{i} ")
         
 
     case "B":

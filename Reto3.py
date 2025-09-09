@@ -1,6 +1,6 @@
 print("=== MENÚ PRINCIPAL ===")
 print("A. Peso de maletas")
-print("B. Configurar parámetros")
+print("B. Cantidad de pasajeros")
 print("C. Salir")
 
 
@@ -13,6 +13,12 @@ match opcion:
         peso = 0
         peso_max = 23000
         i=0
+        capacidad_bodega1 = 8000  # 
+        capacidad_bodega2 = 10000  # 
+        capacidad_bodega3 = 7500   # 
+        bodega1 = 0
+        bodega2 = 0
+        bodega3 = 0
         while peso < peso_max :
             peso = float(input("Ingrese peso en kg: "))
             if peso > 20:
@@ -24,13 +30,28 @@ match opcion:
             else:
                 print(f"Maleta aprovada, su peso es: {peso}Kg")
             i += peso
-            peso_total=i
-            print(f"El peso de carga de la aeronave es:{i} ")
-        
+            peso_total = i
+            if bodega1 + peso <= capacidad_bodega1:
+                bodega1 += peso
+                print(f"La maleta fue enviada a la Bodega 1. (Carga actual: {bodega1}/{capacidad_bodega1})")
+            elif bodega2 + peso <= capacidad_bodega2:
+                bodega2 += peso
+                print(f"La maleta fue enviada a la Bodega 2. (Carga actual: {bodega2}/{capacidad_bodega2})")
 
+            elif bodega3 + peso <= capacidad_bodega3:
+                bodega3 += peso
+                print(f"La maleta fue enviada a la Bodega 3. (Carga actual: {bodega3}/{capacidad_bodega3})")
+            else:
+                print("La maleta no cabe en ninguna bodega.")
+
+            print(f"Estado bodegas -> B1: {bodega1}/{capacidad_bodega1}, B2: {bodega2}/{capacidad_bodega2}, B3: {bodega3}/{capacidad_bodega3}\n")
+
+    
     case "B":
-        print("Entrando a configuración...")
+        print("Cantidad de pasajeros...")
     case "C":
         print("Saliendo del programa...")
     case _:
         print("Opción inválida.")
+
+        

@@ -1,7 +1,7 @@
 
 '''
 # Problema de peso de maletas
-
+Dependiendo del peso de la maleta verificar si se aprueba o no y si no se aprueba cobrar para subirla y que el sistema decida a que bodega (bodega 1 2 o 3) enviarla.
 ## Variables de entrada
 |Nombre  |Tipo|
 |--------------|-----|
@@ -26,9 +26,67 @@
 |bodega3      |       float|
 |espacios    |        dict|
 |bodega_max       |   str|
+### pseudocodigo
+```
+Inicio
 
+    Leer peso_max COMO ENTERO = 23000
+    Leer i COMO REAL = 0
+    Leer capacidad_bodega1 COMO ENTERO = 8000
+    Leer capacidad_bodega2 COMO ENTERO = 10000
+    Leer capacidad_bodega3 COMO ENTERO = 7500
+    Leer bodega1, bodega2, bodega3 COMO REAL = 0
+    Leer espacios COMO DICCIONARIO
+    Leer bodega_max COMO CADENA
+
+    MIENTRAS i < peso_max HACER
+        LEER peso
+
+        SI peso < 0 ENTONCES
+            MOSTRAR "Inserte maleta a la báscula"
+        SINO
+            SI peso > 20 ENTONCES
+                Leer costo COMO REAL = (peso - 20) * 5
+                MOSTRAR "Maleta con sobrepeso"
+                MOSTRAR "El costo de abordaje es: ", costo
+            SINO
+                MOSTRAR "Maleta aprobada, su peso es: ", peso
+            FIN SI
+
+    
+            i = i + peso
+            peso_total = i
+
+            # Calcular espacios disponibles
+            espacio1 = capacidad_bodega1 - bodega1
+            espacio2 = capacidad_bodega2 - bodega2
+            espacio3 = capacidad_bodega3 - bodega3
+
+        
+            SI peso <= MAX(espacio1, espacio2, espacio3) ENTONCES
+                SI espacio1 >= espacio2 Y espacio1 >= espacio3 ENTONCES
+                    bodega1 = bodega1 + peso
+                    MOSTRAR "La maleta fue enviada a la Bodega 1"
+                SINO SI espacio2 >= espacio1 Y espacio2 >= espacio3 ENTONCES
+                    bodega2 = bodega2 + peso
+                    MOSTRAR "La maleta fue enviada a la Bodega 2"
+                SINO
+                    bodega3 = bodega3 + peso
+                    MOSTRAR "La maleta fue enviada a la Bodega 3"
+                FIN SI
+            SINO
+                MOSTRAR "La maleta no cabe en ninguna bodega"
+            FIN SI
+
+            MOSTRAR "Estado bodegas -> B1:", bodega1, "/",capacidad_bodega1,
+                     " B2:", bodega2, "/", capacidad_bodega2,
+                     " B3:", bodega3, "/", capacidad_bodega3
+        FIN SI
+    FIN MIENTRAS
+```
 
 # Problema cantidad de combustible
+Dependiendo de la distancia y de la capacidad del tanque, determinar la cantidad necesaria a llenar el tanque, sabiendo que toca llenar para al menos una hora mas de vuelo y suficiente para llegar al aeropuerto alterno., y asi sucesivamente para varios vuelos
 ## Variables de entrada
 |Nombre             | Tipo|
 |--------------------|------|
@@ -44,6 +102,32 @@
 |-------------------|-------|
 |rendimiento         |float|
 |capacidad_tanque    |float|
+
+## pseudocodigo
+```
+Inicio
+    LEER distancia
+
+    leer distancia
+    leer capacidad 
+    leer rendimiento
+
+    
+    combustible_vuelo = distancia / rendimiento
+    combustible_extra = 1 * rendimiento    
+    combustible_alterno = distancia * 0.1 / rendimiento 
+
+    combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+
+    SI combustible_necesario > capacidad ENTONCES
+        MOSTRAR "El combustible necesario excede la capacidad del tanque"
+    SINO
+        MOSTRAR "Combustible a llenar: ", combustible_necesario
+    FIN SI
+
+FIN 
+```
+
 
 # Problema de cantidad de pasajeros
 

@@ -2,25 +2,48 @@
 '''
 # Problema de peso de maletas
 
-|Variables de entrada|
-|Nombre  |        Tipo|
-|peso     |       float
+## Variables de entrada
+|Nombre  |Tipo|
+|--------------|-----|
+|peso          |float|
 
-|Variables de salida|
-|Nombre      |    Tipo|
-|costo        |   float|
-|peso_total    |  float|
+## Variables de salida
+|Nombre          |Tipo|
+|----------------|-----|
+|costo           |float|
+|peso_total      |float|
 
-|Variables de control|
-|Nombre      |    Tipo|
-|peso_max     |   float|
-|i             |  float|
-|capacidad_bodega1 |  int|
+## Variables de control
+|Nombre             | Tipo|
+|--------------------|----|
+|peso_max           | int|
+|i                  | float|
+|capacidad_bodega1  | int|
 |capacidad_bodega2  | int|
-|capacidad_bodega3   |int|
-|bodega1    |     float|
-|bodega2   |      float|
-|bodega3  |       float|
-'''
+|capacidad_bodega3 |  int|
+|bodega1        |     float|
+|bodega2       |      float|
+|bodega3      |       float|
+|espacios    |        dict|
+|bodega_max       |   str|
 
-# Proble cantidad de pasajeros
+
+# Problema cantidad de combustible
+## Variables de entrada
+|Nombre             | Tipo|
+|--------------------|------|
+|distancia           |float|
+
+## Variables de salida
+|Nombre               |   Tipo|
+|---------------------|--------|
+|combustible_necesario |  float|
+
+## Variables de control
+|Nombre             | Tipo|
+|-------------------|-------|
+|rendimiento         |float|
+|capacidad_tanque    |float|
+
+# Problema de cantidad de pasajeros
+

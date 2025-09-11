@@ -31,6 +31,26 @@ match opcion:
                 print(f"Maleta aprovada, su peso es: {peso}Kg")
             i += peso
             peso_total = i
+            espacio1 = capacidad_bodega1 - bodega1
+            espacio2 = capacidad_bodega2 - bodega2
+            espacio3 = capacidad_bodega3 - bodega3
+
+            if peso <= max(espacio1, espacio2, espacio3):
+                if espacio1 >= espacio2 and espacio1 >= espacio3:
+                    bodega1 += peso
+                    print(f"La maleta fue enviada a la Bodega 1. (Carga actual: {bodega1}/{capacidad_bodega1})")
+                elif espacio2 >= espacio1 and espacio2 >= espacio3:
+                    bodega2 += peso
+                    print(f"La maleta fue enviada a la Bodega 2. (Carga actual: {bodega2}/{capacidad_bodega2})")
+                else:
+                    bodega3 += peso
+                    print(f"La maleta fue enviada a la Bodega 3. (Carga actual: {bodega3}/{capacidad_bodega3})")
+            else:
+                print(" La maleta no cabe en ninguna bodega.")
+            
+            print(f"Estado bodegas -> B1: {bodega1}/{capacidad_bodega1}, B2: {bodega2}/{capacidad_bodega2}, B3: {bodega3}/{capacidad_bodega3}\n")
+
+            '''
             if bodega1 + peso <= capacidad_bodega1:
                 bodega1 += peso
                 print(f"La maleta fue enviada a la Bodega 1. (Carga actual: {bodega1}/{capacidad_bodega1})")
@@ -45,7 +65,7 @@ match opcion:
                 print("La maleta no cabe en ninguna bodega.")
 
             print(f"Estado bodegas -> B1: {bodega1}/{capacidad_bodega1}, B2: {bodega2}/{capacidad_bodega2}, B3: {bodega3}/{capacidad_bodega3}\n")
-
+'''
     
     case "B":
         print("Cantidad de pasajeros...")

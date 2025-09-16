@@ -26,6 +26,18 @@ Dependiendo del peso de la maleta verificar si se aprueba o no y si no se aprueb
 |bodega3      |       float|
 |espacios    |        dict|
 |bodega_max       |   str|
+### ecuaciones
+| **Nombre**                        | **Ecuación**                                                                                        |
+| --------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Costo por sobrepeso**           | `costo = (peso - 20) * 5`  (si `peso > 20`)                                                         |
+| **Acumulación de peso total**     | `i = i + peso` <br> `peso_total = i`                                                                |
+| **Espacio disponible bodega 1**   | `espacio1 = capacidad_bodega1 - bodega1`                                                            |
+| **Espacio disponible bodega 2**   | `espacio2 = capacidad_bodega2 - bodega2`                                                            |
+| **Espacio disponible bodega 3**   | `espacio3 = capacidad_bodega3 - bodega3`                                                            |
+| **Asignación de maleta a bodega** | `bodega_j = bodega_j + peso`  donde `j ∈ {1,2,3}` y `espacio_j = max(espacio1, espacio2, espacio3)` |
+
+
+
 ### pseudocodigo
 ```
 Inicio
@@ -85,47 +97,150 @@ Inicio
     FIN MIENTRAS
 ```
 
+#### Prueba de escritorio
+
+ PRUEBA DE ESCRITORIO
+ Pseudocódigo de maletas y bodegas
+
+
+ Datos iniciales
+ peso_max = 23000
+ i = 0
+ capacidad_bodega1 = 8000
+ capacidad_bodega2 = 10000
+ capacidad_bodega3 = 7500
+ bodega1 = 0
+ bodega2 = 0
+ bodega3 = 0
+
+ Caso de prueba: maletas ingresadas
+ [15, 25, 10, -5, 9000]
+
+
+ PASO A PASO
+
+
+ Maleta = 15
+ - Condición: peso > 0 y <= 20
+ - Acción: "Maleta aprobada, su peso es 15"
+ - Se asigna a Bodega 2 (mayor espacio disponible)
+ - Estado bodegas: B1=0/8000, B2=15/10000, B3=0/7500
+ - i = 15
+
+ Maleta = 25
+ - Condición: peso > 20
+ - Acción: "Maleta con sobrepeso, costo = (25-20)*5 = 25"
+ - Se asigna a Bodega 2
+ - Estado bodegas: B1=0/8000, B2=40/10000, B3=0/7500
+ - i = 40
+
+ Maleta = 10
+ - Condición: peso > 0 y <= 20
+ - Acción: "Maleta aprobada, su peso es 10"
+ - Se asigna a Bodega 2
+ - Estado bodegas: B1=0/8000, B2=50/10000, B3=0/7500
+ - i = 50
+
+ Maleta = -5
+ - Condición: peso < 0
+ - Acción: "Inserte maleta a la báscula"
+ - No se almacena en ninguna bodega
+ - Estado bodegas: B1=0/8000, B2=50/10000, B3=0/7500
+ - i = 50
+
+ Maleta = 9000
+ - Condición: peso > max(espacio1, espacio2, espacio3) → no cabe
+ - Acción: "La maleta no cabe en ninguna bodega"
+ - No se almacena en ninguna bodega
+ - Estado bodegas: B1=0/8000, B2=50/10000, B3=0/7500
+ - i = 9050
+
+ ==========================================
+ RESULTADO FINAL
+ - Peso total acumulado: i = 9050
+ - Estado final bodegas: B1=0, B2=50, B3=0
+
+
 # Problema cantidad de combustible
-Dependiendo de la distancia y de la capacidad del tanque, determinar la cantidad necesaria a llenar el tanque, sabiendo que toca llenar para al menos una hora mas de vuelo y suficiente para llegar al aeropuerto alterno., y asi sucesivamente para varios vuelos
+Dependiendo de la distancia y de la capacidad del tanque, determinar la cantidad necesaria a llenar el tanque, sabiendo que toca llenar para al menos 1 hora de la distancia original mas de vuelo y suficiente para llegar al aeropuerto alterno en caso de emergencia., y que al llegar al destino verificar si lo que sobra alcanza para un nuevo destino con las mismas restricciones y asi que al llegar a ese destino verificar si alcanza el combustible y asi sucecivamente hasta que el piloto diga que ya no hay mas vuelos
 ## Variables de entrada
-|Nombre             | Tipo|
-|--------------------|------|
-|distancia           |float|
+| Nombre            | Tipo  |
+|-------------------|-------|
+| rendimiento       | float |
+| capacidad_tanque  | float |
+| distancia         | float |
+| velocidad         | float |
+| distancia_alterno | float |
+| opcion            | str   |
 
 ## Variables de salida
-|Nombre               |   Tipo|
-|---------------------|--------|
-|combustible_necesario |  float|
+| Nombre              | Tipo  |
+|---------------------|-------|
+| combustible_necesario | float |
+| faltante            | float |
+| combustible_tanque  | float |
 
-## Variables de control
-|Nombre             | Tipo|
-|-------------------|-------|
-|rendimiento         |float|
-|capacidad_tanque    |float|
+## Variables de control / proceso
+| Nombre              | Tipo  |
+|---------------------|-------|
+| vuelo               | int   |
+| combustible_vuelo   | float |
+| distancia_extra     | float |
+| combustible_extra   | float |
+| combustible_alterno | float |
 
 ## pseudocodigo
 ```
-Inicio
-    LEER distancia
+INICIO
 
-    leer distancia
-    leer capacidad 
-    leer rendimiento
+    LEER rendimiento        # km por litro
+    LEER capacidad_tanque   # litros
+    combustible_tanque = capacidad_tanque
 
-    
-    combustible_vuelo = distancia / rendimiento
-    combustible_extra = 1 * rendimiento    
-    combustible_alterno = distancia * 0.1 / rendimiento 
+    vuelo = 1
 
-    combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+    REPETIR
 
-    SI combustible_necesario > capacidad ENTONCES
-        MOSTRAR "El combustible necesario excede la capacidad del tanque"
-    SINO
-        MOSTRAR "Combustible a llenar: ", combustible_necesario
-    FIN SI
+        MOSTRAR "Vuelo ", vuelo
 
-FIN 
+        LEER distancia          # km hasta destino
+        LEER velocidad          # km/h del avión
+        LEER distancia_alterno  # km al aeropuerto alterno
+
+        # Cálculos de combustible
+        combustible_vuelo = distancia / rendimiento
+        distancia_extra = velocidad * 1                 # distancia de 1 hora de vuelo
+        combustible_extra = distancia_extra / rendimiento
+        combustible_alterno = distancia_alterno / rendimiento
+
+        combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+
+        SI combustible_necesario <= combustible_tanque ENTONCES
+            combustible_tanque = combustible_tanque - combustible_vuelo
+            MOSTRAR "Vuelo realizado."
+            MOSTRAR "Combustible restante:", combustible_tanque
+        SINO
+            faltante = combustible_necesario - combustible_tanque
+            MOSTRAR "No alcanza con el combustible actual."
+            MOSTRAR "Debe tanquear:", faltante
+            # Reabastecer
+            combustible_tanque = capacidad_tanque - combustible_vuelo
+            MOSTRAR "Vuelo realizado tras tanqueo."
+            MOSTRAR "Combustible restante:", combustible_tanque
+        FIN SI
+
+        # Decisión del piloto
+        MOSTRAR "¿Desea programar otro vuelo? (s/n): "
+        LEER opcion
+
+        vuelo = vuelo + 1
+
+    HASTA QUE opcion = "n"
+
+    MOSTRAR "--- Fin de la simulación ---"
+
+FIN
+
 ```
 
 

@@ -1,0 +1,369 @@
+
+'''
+# Problema de peso de maletas
+Dependiendo del peso de la maleta verificar si se aprueba o no y si no se aprueba cobrar para subirla y que el sistema decida a que bodega (bodega 1 2 o 3) enviarla.
+## Variables de entrada
+|Nombre  |Tipo|
+|--------------|-----|
+|peso          |float|
+
+## Variables de salida
+|Nombre          |Tipo|
+|----------------|-----|
+|costo           |float|
+|peso_total      |float|
+
+## Variables de control
+|Nombre             | Tipo|
+|--------------------|----|
+|peso_max           | int|
+|i                  | float|
+|capacidad_bodega1  | int|
+|capacidad_bodega2  | int|
+|capacidad_bodega3 |  int|
+|bodega1        |     float|
+|bodega2       |      float|
+|bodega3      |       float|
+|espacios    |        dict|
+|bodega_max       |   str|
+### ecuaciones
+| **Nombre**                        | **Ecuación**                                                                                        |
+| --------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Costo por sobrepeso**           | `costo = (peso - 20) * 5`  (si `peso > 20`)                                                         |
+| **Acumulación de peso total**     | `i = i + peso` <br> `peso_total = i`                                                                |
+| **Espacio disponible bodega 1**   | `espacio1 = capacidad_bodega1 - bodega1`                                                            |
+| **Espacio disponible bodega 2**   | `espacio2 = capacidad_bodega2 - bodega2`                                                            |
+| **Espacio disponible bodega 3**   | `espacio3 = capacidad_bodega3 - bodega3`                                                            |
+| **Asignación de maleta a bodega** | `bodega_j = bodega_j + peso`  donde `j ∈ {1,2,3}` y `espacio_j = max(espacio1, espacio2, espacio3)` |
+
+
+
+### pseudocodigo
+```
+INICIO
+    MOSTRAR "Sistema de control de maletas y bodegas"
+
+    DEFINIR FUNCIÓN calcular_costo(peso)
+        SI peso > 20 ENTONCES
+            RETORNAR (peso - 20) * 5
+        SINO
+            RETORNAR 0
+        FIN SI
+    FIN FUNCIÓN
+
+    DEFINIR FUNCIÓN asignar_bodega(peso, b1, b2, b3, cap1, cap2, cap3)
+        espacio1 = cap1 - b1
+        espacio2 = cap2 - b2
+        espacio3 = cap3 - b3
+
+        SI peso <= MAX(espacio1, espacio2, espacio3) ENTONCES
+            SI espacio1 >= espacio2 Y espacio1 >= espacio3 ENTONCES
+                b1 = b1 + peso
+                MOSTRAR "La maleta fue enviada a la Bodega 1. (Carga actual: ", b1, "/", cap1, ")"
+            SINO SI espacio2 >= espacio1 Y espacio2 >= espacio3 ENTONCES
+                b2 = b2 + peso
+                MOSTRAR "La maleta fue enviada a la Bodega 2. (Carga actual: ", b2, "/", cap2, ")"
+            SINO
+                b3 ← b3 + peso
+                MOSTRAR "La maleta fue enviada a la Bodega 3. (Carga actual: ", b3, "/", cap3, ")"
+            FIN SI
+        SINO
+            MOSTRAR "La maleta no cabe en ninguna bodega."
+        FIN SI
+
+        RETORNAR b1, b2, b3
+    FIN FUNCIÓN
+
+    DEFINIR FUNCIÓN mostrar_estado(b1, b2, b3, cap1, cap2, cap3)
+        MOSTRAR "Estado bodegas = B1:", b1, "/", cap1,
+                ", B2:", b2, "/", cap2,
+                ", B3:", b3, "/", cap3
+    FIN FUNCIÓN
+
+    peso_max = 23000
+    capacidad_bodega1 = 8000
+    capacidad_bodega2 = 10000
+    capacidad_bodega3 = 7500
+    bodega1 = 0
+    bodega2 = 0
+    bodega3 = 0
+    peso_total = 0
+
+    MIENTRAS peso_total < peso_max HACER
+        LEER peso
+
+        SI peso < 0 ENTONCES
+            MOSTRAR "Inserte maleta a la báscula"
+            CONTINUAR
+        FIN SI
+
+        costo = calcular_costo(peso)
+
+        SI costo > 0 ENTONCES
+            MOSTRAR "Maleta con sobrepeso. Costo adicional:", costo, "$"
+        SINO
+            MOSTRAR "Maleta aprobada, su peso es:", peso, "Kg"
+        FIN SI
+
+        peso_total = peso_total + peso
+
+        (bodega1, bodega2, bodega3) = asignar_bodega(peso, bodega1, bodega2, bodega3,
+            capacidad_bodega1, capacidad_bodega2, capacidad_bodega3)
+
+        mostrar_estado(bodega1, bodega2, bodega3,capacidad_bodega1, capacidad_bodega2, capacidad_bodega3)
+
+        LEER opcion
+        opcion = convertir a minúscula(opcion)
+
+        SI opcion != "s" ENTONCES
+            MOSTRAR "Se acabó el programa."
+            SALIR DEL BUCLE
+        FIN SI
+    FIN MIENTRAS
+FIN
+
+```
+
+#### Prueba de escritorio
+
+ PRUEBA DE ESCRITORIO
+ Pseudocódigo de maletas y bodegas
+
+
+ Datos iniciales
+ peso_max = 23000
+ i = 0
+ capacidad_bodega1 = 8000
+ capacidad_bodega2 = 10000
+ capacidad_bodega3 = 7500
+ bodega1 = 0
+ bodega2 = 0
+ bodega3 = 0
+
+ Caso de prueba: maletas ingresadas
+ [15, 25, 10, -5, 9000]
+
+
+ PASO A PASO
+
+
+ Maleta = 15
+ - Condición: peso > 0 y <= 20
+ - Acción: "Maleta aprobada, su peso es 15"
+ - Se asigna a Bodega 2 (mayor espacio disponible)
+ - Estado bodegas: B1=0/8000, B2=15/10000, B3=0/7500
+ - i = 15
+
+ Maleta = 25
+ - Condición: peso > 20
+ - Acción: "Maleta con sobrepeso, costo = (25-20)*5 = 25"
+ - Se asigna a Bodega 2
+ - Estado bodegas: B1=0/8000, B2=40/10000, B3=0/7500
+ - i = 40
+
+ Maleta = 10
+ - Condición: peso > 0 y <= 20
+ - Acción: "Maleta aprobada, su peso es 10"
+ - Se asigna a Bodega 2
+ - Estado bodegas: B1=0/8000, B2=50/10000, B3=0/7500
+ - i = 50
+
+ Maleta = -5
+ - Condición: peso < 0
+ - Acción: "Inserte maleta a la báscula"
+ - No se almacena en ninguna bodega
+ - Estado bodegas: B1=0/8000, B2=50/10000, B3=0/7500
+ - i = 50
+
+ Maleta = 9000
+ - Condición: peso > max(espacio1, espacio2, espacio3) → no cabe
+ - Acción: "La maleta no cabe en ninguna bodega"
+ - No se almacena en ninguna bodega
+ - Estado bodegas: B1=0/8000, B2=50/10000, B3=0/7500
+ - i = 9050
+
+ ==========================================
+ RESULTADO FINAL
+ - Peso total acumulado: i = 9050
+ - Estado final bodegas: B1=0, B2=50, B3=0
+
+
+# Problema cantidad de combustible
+Dependiendo de la distancia y de la capacidad del tanque, determinar la cantidad necesaria a llenar el tanque, sabiendo que toca llenar para al menos 1 hora de la distancia original mas de vuelo y suficiente para llegar al aeropuerto alterno en caso de emergencia., y que al llegar al destino verificar si lo que sobra alcanza para un nuevo destino con las mismas restricciones y asi que al llegar a ese destino verificar si alcanza el combustible y asi sucecivamente hasta que el piloto diga que ya no hay mas vuelos
+## Variables de entrada
+| Nombre            | Tipo  |
+|-------------------|-------|
+| rendimiento       | float |
+| capacidad_tanque  | float |
+| distancia         | float |
+| velocidad         | float |
+| distancia_alterno | float |
+| opcion            | str   |
+
+## Variables de salida
+| Nombre              | Tipo  |
+|---------------------|-------|
+| combustible_necesario | float |
+| faltante            | float |
+| combustible_tanque  | float |
+
+## Variables de control / proceso
+| Nombre              | Tipo  |
+|---------------------|-------|
+| vuelo               | int   |
+| combustible_vuelo   | float |
+| distancia_extra     | float |
+| combustible_extra   | float |
+| combustible_alterno | float |
+
+
+## pseudocodigo
+```
+INICIO
+
+    LEER rendimiento        # km por litro
+    LEER capacidad_tanque   # litros
+    combustible_tanque = capacidad_tanque
+
+    vuelo = 1
+
+    REPETIR
+
+        MOSTRAR "Vuelo ", vuelo
+
+        LEER distancia          # km hasta destino
+        LEER velocidad          # km/h del avión
+        LEER distancia_alterno  # km al aeropuerto alterno
+
+        # Cálculos de combustible
+        combustible_vuelo = distancia / rendimiento
+        distancia_extra = velocidad * 1                 # distancia de 1 hora de vuelo
+        combustible_extra = distancia_extra / rendimiento
+        combustible_alterno = distancia_alterno / rendimiento
+
+        combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+
+        SI combustible_necesario <= combustible_tanque ENTONCES
+            combustible_tanque = combustible_tanque - combustible_vuelo
+            MOSTRAR "Vuelo realizado."
+            MOSTRAR "Combustible restante:", combustible_tanque
+        SINO
+            faltante = combustible_necesario - combustible_tanque
+            MOSTRAR "No alcanza con el combustible actual."
+            MOSTRAR "Debe tanquear:", faltante
+            # Reabastecer
+            combustible_tanque = capacidad_tanque - combustible_vuelo
+            MOSTRAR "Vuelo realizado tras tanqueo."
+            MOSTRAR "Combustible restante:", combustible_tanque
+        FIN SI
+
+        # Decisión del piloto
+        MOSTRAR "¿Desea programar otro vuelo? (s/n): "
+        LEER opcion
+
+        vuelo = vuelo + 1
+
+    HASTA QUE opcion = "n"
+
+    MOSTRAR "--- Fin de la simulación ---"
+
+FIN
+
+```
+## ecuaciones
+Cálculos de combustible
+combustible_vuelo = distancia / rendimiento
+distancia_extra = velocidad * 1
+combustible_extra = distancia_extra / rendimiento
+combustible_alterno = distancia_alterno / rendimiento
+
+combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+
+Verificación de combustible disponible
+if combustible_necesario <= combustible_tanque:
+    combustible_tanque = combustible_tanque - combustible_vuelo
+else:
+    faltante = combustible_necesario - combustible_tanque
+    combustible_tanque = capacidad_tanque - combustible_vuelo
+
+Actualización de contador de vuelos
+vuelo = vuelo + 1
+
+
+# Problema del Drag
+Dependiendo del peso del avión y de la velocidad del viento en pista, determinar si el despegue es seguro. Para ello, el programa debe pedir al usuario el peso del avión, la potencia de los motores y la velocidad del viento. El sistema debe calcular la velocidad mínima de despegue necesaria y compararla con la velocidad que se logra con la potencia disponible y las condiciones del viento. Si el avión no alcanza la velocidad mínima, el programa debe indicar que el despegue no es seguro y permitir al usuario ajustar los parámetros (peso, potencia o viento) hasta que se logre un despegue seguro o el usuario decida cancelar la simulación.
+
+# Variables de entrada
+| Nombre         | Tipo  |
+|----------------|-------|
+| densidad       | float |
+| area_frontal   | float |
+| coef_arrastre  | float |
+| vel_inicial    | float |
+| vel_final      | float |
+| incremento_vel | float |
+| umbral_critico | float |
+
+# Variables de salida
+| Nombre         | Tipo  |
+|----------------|-------|
+| drag           | float |
+| mensaje_estado | str   |
+
+# Variables de control / proceso
+| Nombre    | Tipo  |
+|-----------|-------|
+| velocidad | float |
+| i         | int   |
+
+# pseudocodigo
+```
+Inicio
+
+    Leer densidad
+    Leer area_frontal
+    Leer coef_arrastre
+    Leer vel_inicial
+    Leer vel_final
+    Leer incremento_vel
+    Leer umbral_critico
+
+    Definir velocidad COMO REAL = vel_inicial
+    Definir i COMO ENTERO = 1
+
+    Mientras velocidad <= vel_final Hacer
+        drag = (1/2) * densidad * (velocidad ^ 2) * area_frontal * coef_arrastre
+
+        Si drag <= umbral_critico Entonces
+            mensaje_estado = "Seguro"
+        Sino
+            mensaje_estado = "Riesgo estructural"
+        FinSi
+
+        Escribir "Iteración:", i
+        Escribir "Velocidad:", velocidad, "m/s"
+        Escribir "Resistencia (Drag):", drag, "N"
+        Escribir "Estado:", mensaje_estado
+
+        velocidad = velocidad + incremento_vel
+        i = i + 1
+    FinMientras
+
+Fin
+```
+# ecuaciones
+Fórmula del Drag
+drag = 0.5 * densidad * (velocidad ** 2) * area_frontal * coef_arrastre
+
+Condicional para verificar el estado
+if drag <= umbral_critico:
+    mensaje_estado = "Seguro"
+else:
+    mensaje_estado = "Riesgo estructural"
+
+Actualización de variables en cada iteración
+velocidad = velocidad + incremento_vel
+i = i + 1
+
+
+

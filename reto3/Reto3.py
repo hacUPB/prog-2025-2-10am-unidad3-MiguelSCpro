@@ -1,151 +1,186 @@
-print("=== MENÚ PRINCIPAL ===")
-print("A. Peso de maletas")
-print("B. Cantidad de pasajeros")
-print("C. Solución Drag")
-print("D. Salir")
+while True:
+
+    print("=== MENÚ PRINCIPAL ===")
+    print("A. Peso de maletas")
+    print("B. Cantidad de combustible")
+    print("C. Solución Drag")
+    print("D. Salir")
 
 
-opcion = input("Selecciona una opción: ").upper()
+    opcion = input("Selecciona una opción: ").upper()
 
 
-match opcion:
-    case "A":
-        print("Peso de maletas....")
-        peso = 0
-        peso_max = 23000
-        i=0
-        capacidad_bodega1 = 8000  # 
-        capacidad_bodega2 = 10000  # 
-        capacidad_bodega3 = 7500   # 
-        bodega1 = 0
-        bodega2 = 0
-        bodega3 = 0
-        while peso < peso_max :
-            peso = float(input("Ingrese peso en kg: "))
-            if peso > 20:
-                print("Maleta con sobrepeso")
-                costo = ((peso-20)*5)
-                print(f"el costo de abordaje de la maleta es de: {costo}$")
-            elif peso < 0:
-                print("Inserte maleta a la bascula")
-            else:
-                print(f"Maleta aprovada, su peso es: {peso}Kg")
-            i += peso
-            peso_total = i
-            espacio1 = capacidad_bodega1 - bodega1
-            espacio2 = capacidad_bodega2 - bodega2
-            espacio3 = capacidad_bodega3 - bodega3
+    match opcion:
+        case "A":
+            print("Sistema de control de maletas y bodegas ")
 
-            if peso <= max(espacio1, espacio2, espacio3):
-                if espacio1 >= espacio2 and espacio1 >= espacio3:
-                    bodega1 += peso
-                    print(f"La maleta fue enviada a la Bodega 1. (Carga actual: {bodega1}/{capacidad_bodega1})")
-                elif espacio2 >= espacio1 and espacio2 >= espacio3:
-                    bodega2 += peso
-                    print(f"La maleta fue enviada a la Bodega 2. (Carga actual: {bodega2}/{capacidad_bodega2})")
-                else:
-                    bodega3 += peso
-                    print(f"La maleta fue enviada a la Bodega 3. (Carga actual: {bodega3}/{capacidad_bodega3})")
-            else:
-                print(" La maleta no cabe en ninguna bodega.")
-            
-            print(f"Estado bodegas -> B1: {bodega1}/{capacidad_bodega1}, B2: {bodega2}/{capacidad_bodega2}, B3: {bodega3}/{capacidad_bodega3}\n")
+            def calcular_costo(peso): #Definicion de la función
+                if peso > 20:
+                    return (peso - 20) * 5
+                return 0
 
-    
-    case "B":
-        print("Cantidad de combustible...")
+            def asignar_bodega(peso, b1, b2, b3, cap1, cap2, cap3):#definicion de la funcion
+                espacio1 = cap1 - b1
+                espacio2 = cap2 - b2
+                espacio3 = cap3 - b3
 
-                # Datos iniciales
-        rendimiento = float(input("Ingrese el rendimiento (km por litro): "))
-        capacidad_tanque = float(input("Ingrese la capacidad del tanque (litros): "))
-        combustible_tanque = capacidad_tanque
-
-        vuelo = 1
-
-        while True:
-                    print(f"\n Vuelo {vuelo}")
-
-                    distancia = float(input("Ingrese la distancia del vuelo (km): "))
-                    velocidad = float(input("Ingrese la velocidad del avión (km/h): "))
-                    distancia_alterno = float(input("Ingrese la distancia al aeropuerto alterno (km): "))
-
-                    combustible_vuelo = distancia / rendimiento
-                    tiempo_vuelo = distancia / velocidad  
-                    distancia_extra = velocidad * 1       
-                    combustible_extra = distancia_extra / rendimiento
-                    combustible_alterno = distancia_alterno / rendimiento
-
-                   
-                    combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
-
-                    print(f" Combustible requerido para este vuelo: {round(combustible_necesario,2)} litros")
-                    print(f" - Vuelo: {round(combustible_vuelo,2)} L")
-                    print(f" - Extra (1h): {round(combustible_extra,2)} L")
-                    print(f" - Alterno: {round(combustible_alterno,2)} L")
-
-                    
-                    if combustible_necesario <= combustible_tanque:
-                        combustible_tanque -= combustible_necesario
-                        print(" Vuelo realizado con seguridad.")
-                        print("Combustible restante en tanque:", round(combustible_tanque, 2), "litros")
+                if peso <= max(espacio1, espacio2, espacio3):
+                    if espacio1 >= espacio2 and espacio1 >= espacio3:
+                        b1 += peso
+                        print(f"La maleta fue enviada a la Bodega 1. (Carga actual: {b1}/{cap1})")
+                    elif espacio2 >= espacio1 and espacio2 >= espacio3:
+                        b2 += peso
+                        print(f"La maleta fue enviada a la Bodega 2. (Carga actual: {b2}/{cap2})")
                     else:
-                        faltante = combustible_necesario - combustible_tanque
-                        print(" No alcanza con el combustible actual.")
-                        if combustible_necesario <= capacidad_tanque:
-                            print("Debe tanquear:", round(faltante, 2), "litros")
-                            combustible_tanque = capacidad_tanque - combustible_necesario
-                            print("Vuelo realizado tras tanqueo.")
-                            print("Combustible restante:", round(combustible_tanque, 2), "litros")
-                        else:
-                            print(" El combustible requerido excede la capacidad del tanque.")
-                            print(f"Capacidad máxima: {capacidad_tanque} L, requerido: {round(combustible_necesario,2)} L")
-                            break
+                        b3 += peso
+                        print(f"La maleta fue enviada a la Bodega 3. (Carga actual: {b3}/{cap3})")
+                else:
+                    print("La maleta no cabe en ninguna bodega.")
+                
+                return b1, b2, b3
 
-                    if combustible_tanque <= 0:
-                        print(" No queda combustible suficiente para programar otro vuelo.")
+            def mostrar_estado(b1, b2, b3, cap1, cap2, cap3):#definicion de la funcion
+                print(f"Estado bodegas -> B1: {b1}/{cap1}, B2: {b2}/{cap2}, B3: {b3}/{cap3}\n")
+
+           
+            peso_max = 23000 #Valor que se puede sustituir
+            capacidad_bodega1 = 8000 #Valor que se puede sustituir
+            capacidad_bodega2 = 10000 #Valor que se puede sustituir
+            capacidad_bodega3 = 7500 #Valor que se puede sustituir
+            bodega1 = bodega2 = bodega3 = 0
+            peso_total = 0
+
+            while peso_total < peso_max:
+                peso = float(input("Ingrese peso en kg: "))
+
+                if peso < 0:
+                    print("Inserte maleta a la báscula")
+                    continue
+                
+                costo = calcular_costo(peso)
+                if costo > 0:
+                    print(f"Maleta con sobrepeso. Costo adicional: {costo}$")
+                else:
+                    print(f"Maleta aprobada, su peso es: {peso}Kg")
+
+                peso_total += peso
+                bodega1, bodega2, bodega3 = asignar_bodega(peso, bodega1, bodega2, bodega3,
+                    capacidad_bodega1, capacidad_bodega2, capacidad_bodega3)
+                mostrar_estado(bodega1, bodega2, bodega3,capacidad_bodega1, capacidad_bodega2, capacidad_bodega3)
+
+                opcion = input("¿Desea seguir pesando? (s/n): ").lower()#lower para pasar a minusculas
+                if opcion != "s":
+                    print("Se acabó el programa.")
+                    break
+
+
+
+        
+        case "B":
+            print("Cantidad de combustible...")
+
+            # 🔹 Definimos la función
+            def calcular_combustible(distancia, velocidad, distancia_alterno, rendimiento):#Definicion de la funcion
+                """
+                Calcula el combustible necesario para un vuelo considerando:
+                - Vuelo hasta el destino
+                - 1 hora extra de vuelo
+                - Vuelo al aeropuerto alterno
+                """
+                combustible_vuelo = distancia / rendimiento
+                distancia_extra = velocidad * 1
+                combustible_extra = distancia_extra / rendimiento
+                combustible_alterno = distancia_alterno / rendimiento
+
+                combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+                return combustible_necesario, combustible_vuelo, combustible_extra, combustible_alterno
+
+
+            # Entradas iniciales
+            rendimiento = float(input("Ingrese el rendimiento (km por litro): "))
+            capacidad_tanque = float(input("Ingrese la capacidad del tanque (litros): "))
+            combustible_tanque = capacidad_tanque
+
+            vuelo = 1
+
+            while True:
+                print(f"\n Vuelo {vuelo}")
+
+                distancia = float(input("Ingrese la distancia del vuelo (km): "))
+                velocidad = float(input("Ingrese la velocidad del avión (km/h): "))
+                distancia_alterno = float(input("Ingrese la distancia al aeropuerto alterno (km): "))
+
+                
+                combustible_necesario, combustible_vuelo, combustible_extra, combustible_alterno = calcular_combustible(distancia, velocidad, distancia_alterno, rendimiento)
+
+                print(f" Combustible requerido para este vuelo: {round(combustible_necesario, 2)} litros")
+                print(f" Vuelo: {round(combustible_vuelo, 2)} L")
+                print(f" Extra (1h): {round(combustible_extra, 2)} L")
+                print(f" Alterno: {round(combustible_alterno, 2)} L")
+
+                if combustible_necesario <= combustible_tanque:
+                    combustible_tanque -= combustible_necesario
+                    print(" Vuelo realizado con seguridad.")
+                    print(" Combustible restante en tanque:", round(combustible_tanque, 2), "litros")
+                else:
+                    faltante = combustible_necesario - combustible_tanque
+                    print(" No alcanza con el combustible actual.")
+                    if combustible_necesario <= capacidad_tanque:
+                        print(" Debe tanquear:", round(faltante, 2), "litros")
+                        combustible_tanque = capacidad_tanque - combustible_necesario
+                        print(" Vuelo realizado tras tanqueo.")
+                        print(" Combustible restante:", round(combustible_tanque, 2), "litros")
+                    else:
+                        print(" El combustible requerido excede la capacidad del tanque.")
+                        print(f" Capacidad máxima: {capacidad_tanque} L, requerido: {round(combustible_necesario, 2)} L")
                         break
 
-                    opcion = input("¿Desea programar otro vuelo? (s/n): ").lower()
-                    if opcion != "s":
-                        print("El piloto decidió no programar más vuelos.")
-                        break
+                if combustible_tanque <= 0:
+                    print(" No queda combustible suficiente para programar otro vuelo.")
+                    break
 
-                    vuelo += 1
+                opcion = input("¿Desea programar otro vuelo? (s/n): ").lower()
+                if opcion != "s":
+                    print(" El piloto decidió no programar más vuelos.")
+                    break
 
-    case "C":
-        print("velocidad del despegue")
+                vuelo += 1
 
-        densidad = float(input("Ingrese la densidad del aire (kg/m³): "))
-        area_frontal = float(input("Ingrese el área frontal del avión (m²): "))
-        coef_arrastre = float(input("Ingrese el coeficiente de arrastre (CD): "))
-        vel_inicial = float(input("Ingrese la velocidad inicial (m/s): "))
-        vel_final = float(input("Ingrese la velocidad final (m/s): "))
-        incremento_vel = float(input("Ingrese el incremento de velocidad (m/s): "))
-        umbral_critico = float(input("Ingrese el umbral crítico de resistencia (N): "))
+        case "C":
+            print("velocidad del despegue")
 
-        velocidad = vel_inicial
-        i = 1
+            densidad = float(input("Ingrese la densidad del aire (kg/m³): "))
+            area_frontal = float(input("Ingrese el área frontal del avión (m²): "))
+            coef_arrastre = float(input("Ingrese el coeficiente de arrastre (CD): "))
+            vel_inicial = float(input("Ingrese la velocidad inicial (m/s): "))
+            vel_final = float(input("Ingrese la velocidad final (m/s): "))
+            incremento_vel = float(input("Ingrese el incremento de velocidad (m/s): "))
+            umbral_critico = float(input("Ingrese el umbral crítico de resistencia (N): "))
 
-        while velocidad <= vel_final:
-        
-            drag = 0.5 * densidad * (velocidad ** 2) * area_frontal * coef_arrastre
-        
-            if drag <= umbral_critico:
-                mensaje_estado = "Seguro"
-            else:
-                mensaje_estado = "peligro"
+            velocidad = vel_inicial
+            i = 1
+
+            while velocidad <= vel_final:
             
-            print(f"\nIteración {i}")
-            print(f"Velocidad: {velocidad:.2f} m/s")
-            print(f"Resistencia (Drag): {drag:.2f} N")
-            print(f"Estado: {mensaje_estado}")
+                drag = 0.5 * densidad * (velocidad ** 2) * area_frontal * coef_arrastre
+            
+                if drag <= umbral_critico:
+                    mensaje_estado = "Seguro"
+                else:
+                    mensaje_estado = "peligro"
+                
+                print(f"\nIteración {i}")
+                print(f"Velocidad: {velocidad:.2f} m/s")
+                print(f"Resistencia (Drag): {drag:.2f} N")
+                print(f"Estado: {mensaje_estado}")
 
-            velocidad += incremento_vel
-            i += 1
+                velocidad += incremento_vel
+                i += 1
 
-    case "D":
-        print("Saliendo del programa...")
-    case _:
-        print("Opción inválida.")
+        case "D":
+            print("Saliendo del programa...")
+        case _:
+            print("Opción inválida.")
+    break
 
         

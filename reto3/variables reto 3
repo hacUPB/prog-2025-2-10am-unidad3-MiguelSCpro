@@ -40,61 +40,88 @@ Dependiendo del peso de la maleta verificar si se aprueba o no y si no se aprueb
 
 ### pseudocodigo
 ```
-Inicio
+INICIO
+    MOSTRAR "Sistema de control de maletas y bodegas"
 
-    Leer peso_max COMO ENTERO = 23000
-    Leer i COMO REAL = 0
-    Leer capacidad_bodega1 COMO ENTERO = 8000
-    Leer capacidad_bodega2 COMO ENTERO = 10000
-    Leer capacidad_bodega3 COMO ENTERO = 7500
-    Leer bodega1, bodega2, bodega3 COMO REAL = 0
-    Leer espacios COMO DICCIONARIO
-    Leer bodega_max COMO CADENA
+    DEFINIR FUNCIÓN calcular_costo(peso)
+        SI peso > 20 ENTONCES
+            RETORNAR (peso - 20) * 5
+        SINO
+            RETORNAR 0
+        FIN SI
+    FIN FUNCIÓN
 
-    MIENTRAS i < peso_max HACER
+    DEFINIR FUNCIÓN asignar_bodega(peso, b1, b2, b3, cap1, cap2, cap3)
+        espacio1 = cap1 - b1
+        espacio2 = cap2 - b2
+        espacio3 = cap3 - b3
+
+        SI peso <= MAX(espacio1, espacio2, espacio3) ENTONCES
+            SI espacio1 >= espacio2 Y espacio1 >= espacio3 ENTONCES
+                b1 = b1 + peso
+                MOSTRAR "La maleta fue enviada a la Bodega 1. (Carga actual: ", b1, "/", cap1, ")"
+            SINO SI espacio2 >= espacio1 Y espacio2 >= espacio3 ENTONCES
+                b2 = b2 + peso
+                MOSTRAR "La maleta fue enviada a la Bodega 2. (Carga actual: ", b2, "/", cap2, ")"
+            SINO
+                b3 ← b3 + peso
+                MOSTRAR "La maleta fue enviada a la Bodega 3. (Carga actual: ", b3, "/", cap3, ")"
+            FIN SI
+        SINO
+            MOSTRAR "La maleta no cabe en ninguna bodega."
+        FIN SI
+
+        RETORNAR b1, b2, b3
+    FIN FUNCIÓN
+
+    DEFINIR FUNCIÓN mostrar_estado(b1, b2, b3, cap1, cap2, cap3)
+        MOSTRAR "Estado bodegas = B1:", b1, "/", cap1,
+                ", B2:", b2, "/", cap2,
+                ", B3:", b3, "/", cap3
+    FIN FUNCIÓN
+
+    peso_max = 23000
+    capacidad_bodega1 = 8000
+    capacidad_bodega2 = 10000
+    capacidad_bodega3 = 7500
+    bodega1 = 0
+    bodega2 = 0
+    bodega3 = 0
+    peso_total = 0
+
+    MIENTRAS peso_total < peso_max HACER
         LEER peso
 
         SI peso < 0 ENTONCES
             MOSTRAR "Inserte maleta a la báscula"
+            CONTINUAR
+        FIN SI
+
+        costo = calcular_costo(peso)
+
+        SI costo > 0 ENTONCES
+            MOSTRAR "Maleta con sobrepeso. Costo adicional:", costo, "$"
         SINO
-            SI peso > 20 ENTONCES
-                Leer costo COMO REAL = (peso - 20) * 5
-                MOSTRAR "Maleta con sobrepeso"
-                MOSTRAR "El costo de abordaje es: ", costo
-            SINO
-                MOSTRAR "Maleta aprobada, su peso es: ", peso
-            FIN SI
+            MOSTRAR "Maleta aprobada, su peso es:", peso, "Kg"
+        FIN SI
 
-    
-            i = i + peso
-            peso_total = i
+        peso_total = peso_total + peso
 
-            # Calcular espacios disponibles
-            espacio1 = capacidad_bodega1 - bodega1
-            espacio2 = capacidad_bodega2 - bodega2
-            espacio3 = capacidad_bodega3 - bodega3
+        (bodega1, bodega2, bodega3) = asignar_bodega(peso, bodega1, bodega2, bodega3,
+            capacidad_bodega1, capacidad_bodega2, capacidad_bodega3)
 
-        
-            SI peso <= MAX(espacio1, espacio2, espacio3) ENTONCES
-                SI espacio1 >= espacio2 Y espacio1 >= espacio3 ENTONCES
-                    bodega1 = bodega1 + peso
-                    MOSTRAR "La maleta fue enviada a la Bodega 1"
-                SINO SI espacio2 >= espacio1 Y espacio2 >= espacio3 ENTONCES
-                    bodega2 = bodega2 + peso
-                    MOSTRAR "La maleta fue enviada a la Bodega 2"
-                SINO
-                    bodega3 = bodega3 + peso
-                    MOSTRAR "La maleta fue enviada a la Bodega 3"
-                FIN SI
-            SINO
-                MOSTRAR "La maleta no cabe en ninguna bodega"
-            FIN SI
+        mostrar_estado(bodega1, bodega2, bodega3,capacidad_bodega1, capacidad_bodega2, capacidad_bodega3)
 
-            MOSTRAR "Estado bodegas -> B1:", bodega1, "/",capacidad_bodega1,
-                     " B2:", bodega2, "/", capacidad_bodega2,
-                     " B3:", bodega3, "/", capacidad_bodega3
+        LEER opcion
+        opcion = convertir a minúscula(opcion)
+
+        SI opcion != "s" ENTONCES
+            MOSTRAR "Se acabó el programa."
+            SALIR DEL BUCLE
         FIN SI
     FIN MIENTRAS
+FIN
+
 ```
 
 #### Prueba de escritorio
@@ -189,6 +216,7 @@ Dependiendo de la distancia y de la capacidad del tanque, determinar la cantidad
 | combustible_extra   | float |
 | combustible_alterno | float |
 
+
 ## pseudocodigo
 ```
 INICIO
@@ -242,6 +270,25 @@ INICIO
 FIN
 
 ```
+## ecuaciones
+Cálculos de combustible
+combustible_vuelo = distancia / rendimiento
+distancia_extra = velocidad * 1
+combustible_extra = distancia_extra / rendimiento
+combustible_alterno = distancia_alterno / rendimiento
+
+combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+
+Verificación de combustible disponible
+if combustible_necesario <= combustible_tanque:
+    combustible_tanque = combustible_tanque - combustible_vuelo
+else:
+    faltante = combustible_necesario - combustible_tanque
+    combustible_tanque = capacidad_tanque - combustible_vuelo
+
+Actualización de contador de vuelos
+vuelo = vuelo + 1
+
 
 # Problema del Drag
 Dependiendo del peso del avión y de la velocidad del viento en pista, determinar si el despegue es seguro. Para ello, el programa debe pedir al usuario el peso del avión, la potencia de los motores y la velocidad del viento. El sistema debe calcular la velocidad mínima de despegue necesaria y compararla con la velocidad que se logra con la potencia disponible y las condiciones del viento. Si el avión no alcanza la velocidad mínima, el programa debe indicar que el despegue no es seguro y permitir al usuario ajustar los parámetros (peso, potencia o viento) hasta que se logre un despegue seguro o el usuario decida cancelar la simulación.
@@ -304,6 +351,19 @@ Inicio
 
 Fin
 ```
+# ecuaciones
+Fórmula del Drag
+drag = 0.5 * densidad * (velocidad ** 2) * area_frontal * coef_arrastre
+
+Condicional para verificar el estado
+if drag <= umbral_critico:
+    mensaje_estado = "Seguro"
+else:
+    mensaje_estado = "Riesgo estructural"
+
+Actualización de variables en cada iteración
+velocidad = velocidad + incremento_vel
+i = i + 1
 
 
 

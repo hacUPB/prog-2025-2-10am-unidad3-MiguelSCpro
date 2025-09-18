@@ -243,6 +243,67 @@ FIN
 
 ```
 
+# Problema del Drag
+Dependiendo del peso del avión y de la velocidad del viento en pista, determinar si el despegue es seguro. Para ello, el programa debe pedir al usuario el peso del avión, la potencia de los motores y la velocidad del viento. El sistema debe calcular la velocidad mínima de despegue necesaria y compararla con la velocidad que se logra con la potencia disponible y las condiciones del viento. Si el avión no alcanza la velocidad mínima, el programa debe indicar que el despegue no es seguro y permitir al usuario ajustar los parámetros (peso, potencia o viento) hasta que se logre un despegue seguro o el usuario decida cancelar la simulación.
 
-# Problema de cantidad de pasajeros
+# Variables de entrada
+| Nombre         | Tipo  |
+|----------------|-------|
+| densidad       | float |
+| area_frontal   | float |
+| coef_arrastre  | float |
+| vel_inicial    | float |
+| vel_final      | float |
+| incremento_vel | float |
+| umbral_critico | float |
+
+# Variables de salida
+| Nombre         | Tipo  |
+|----------------|-------|
+| drag           | float |
+| mensaje_estado | str   |
+
+# Variables de control / proceso
+| Nombre    | Tipo  |
+|-----------|-------|
+| velocidad | float |
+| i         | int   |
+
+# pseudocodigo
+```
+Inicio
+
+    Leer densidad
+    Leer area_frontal
+    Leer coef_arrastre
+    Leer vel_inicial
+    Leer vel_final
+    Leer incremento_vel
+    Leer umbral_critico
+
+    Definir velocidad COMO REAL = vel_inicial
+    Definir i COMO ENTERO = 1
+
+    Mientras velocidad <= vel_final Hacer
+        drag = (1/2) * densidad * (velocidad ^ 2) * area_frontal * coef_arrastre
+
+        Si drag <= umbral_critico Entonces
+            mensaje_estado = "Seguro"
+        Sino
+            mensaje_estado = "Riesgo estructural"
+        FinSi
+
+        Escribir "Iteración:", i
+        Escribir "Velocidad:", velocidad, "m/s"
+        Escribir "Resistencia (Drag):", drag, "N"
+        Escribir "Estado:", mensaje_estado
+
+        velocidad = velocidad + incremento_vel
+        i = i + 1
+    FinMientras
+
+Fin
+```
+
+
 

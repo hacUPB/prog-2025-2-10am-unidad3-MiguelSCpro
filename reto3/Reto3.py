@@ -1,7 +1,8 @@
 print("=== MENÚ PRINCIPAL ===")
 print("A. Peso de maletas")
 print("B. Cantidad de pasajeros")
-print("C. Salir")
+print("C. Solución Drag")
+print("D. Salir")
 
 
 opcion = input("Selecciona una opción: ").upper()
@@ -53,7 +54,8 @@ match opcion:
     
     case "B":
         print("Cantidad de combustible...")
-                
+
+                # Datos iniciales
         rendimiento = float(input("Ingrese el rendimiento (km por litro): "))
         capacidad_tanque = float(input("Ingrese la capacidad del tanque (litros): "))
         combustible_tanque = capacidad_tanque
@@ -61,45 +63,87 @@ match opcion:
         vuelo = 1
 
         while True:
-            print(f"\nVuelo {vuelo}")
+                    print(f"\n Vuelo {vuelo}")
 
-            distancia = float(input("Ingrese la distancia del vuelo (km): "))
-            velocidad = float(input("Ingrese la velocidad del avión (km/h): "))
-            distancia_alterno = float(input("Ingrese la distancia al aeropuerto alterno (km): "))
+                    distancia = float(input("Ingrese la distancia del vuelo (km): "))
+                    velocidad = float(input("Ingrese la velocidad del avión (km/h): "))
+                    distancia_alterno = float(input("Ingrese la distancia al aeropuerto alterno (km): "))
 
+                    combustible_vuelo = distancia / rendimiento
+                    tiempo_vuelo = distancia / velocidad  
+                    distancia_extra = velocidad * 1       
+                    combustible_extra = distancia_extra / rendimiento
+                    combustible_alterno = distancia_alterno / rendimiento
 
-            combustible_vuelo = distancia / rendimiento
-            tiempo_vuelo = distancia / velocidad  # horas
-            distancia_extra = velocidad * 1       # distancia para 1 hora extra
-            combustible_extra = distancia_extra / rendimiento
-            combustible_alterno = distancia_alterno / rendimiento
+                   
+                    combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
 
-            combustible_necesario = combustible_vuelo + combustible_extra + combustible_alterno
+                    print(f" Combustible requerido para este vuelo: {round(combustible_necesario,2)} litros")
+                    print(f" - Vuelo: {round(combustible_vuelo,2)} L")
+                    print(f" - Extra (1h): {round(combustible_extra,2)} L")
+                    print(f" - Alterno: {round(combustible_alterno,2)} L")
 
-            if combustible_necesario <= combustible_tanque:
-                combustible_tanque -= combustible_vuelo
-                print("Vuelo realizado.")
-                print("Combustible restante en tanque:", round(combustible_tanque, 2), "litros")
-            else:
-                faltante = combustible_necesario - combustible_tanque
-                print("No alcanza con el combustible actual.")
-                print("Debe tanquear:", round(faltante, 2), "litros")
-                # Reabastecer para completar vuelo
-                combustible_tanque = capacidad_tanque - combustible_vuelo
-                print("Vuelo realizado tras tanqueo.")
-                print("Combustible restante:", round(combustible_tanque, 2), "litros")
+                    
+                    if combustible_necesario <= combustible_tanque:
+                        combustible_tanque -= combustible_necesario
+                        print(" Vuelo realizado con seguridad.")
+                        print("Combustible restante en tanque:", round(combustible_tanque, 2), "litros")
+                    else:
+                        faltante = combustible_necesario - combustible_tanque
+                        print(" No alcanza con el combustible actual.")
+                        if combustible_necesario <= capacidad_tanque:
+                            print("Debe tanquear:", round(faltante, 2), "litros")
+                            combustible_tanque = capacidad_tanque - combustible_necesario
+                            print("Vuelo realizado tras tanqueo.")
+                            print("Combustible restante:", round(combustible_tanque, 2), "litros")
+                        else:
+                            print(" El combustible requerido excede la capacidad del tanque.")
+                            print(f"Capacidad máxima: {capacidad_tanque} L, requerido: {round(combustible_necesario,2)} L")
+                            break
 
-            # Verificar si lo que sobra alcanza para un próximo destino
-            opcion = input("¿Desea programar otro vuelo? (s/n): ").lower()
-            if opcion != "s":
-                print("El piloto decidió no programar más vuelos.")
-                break
+                    if combustible_tanque <= 0:
+                        print(" No queda combustible suficiente para programar otro vuelo.")
+                        break
 
-            vuelo += 1
+                    opcion = input("¿Desea programar otro vuelo? (s/n): ").lower()
+                    if opcion != "s":
+                        print("El piloto decidió no programar más vuelos.")
+                        break
 
-        print("\n--- Fin de la simulación ---")
+                    vuelo += 1
 
     case "C":
+        print("velocidad del despegue")
+
+        densidad = float(input("Ingrese la densidad del aire (kg/m³): "))
+        area_frontal = float(input("Ingrese el área frontal del avión (m²): "))
+        coef_arrastre = float(input("Ingrese el coeficiente de arrastre (CD): "))
+        vel_inicial = float(input("Ingrese la velocidad inicial (m/s): "))
+        vel_final = float(input("Ingrese la velocidad final (m/s): "))
+        incremento_vel = float(input("Ingrese el incremento de velocidad (m/s): "))
+        umbral_critico = float(input("Ingrese el umbral crítico de resistencia (N): "))
+
+        velocidad = vel_inicial
+        i = 1
+
+        while velocidad <= vel_final:
+        
+            drag = 0.5 * densidad * (velocidad ** 2) * area_frontal * coef_arrastre
+        
+            if drag <= umbral_critico:
+                mensaje_estado = "Seguro"
+            else:
+                mensaje_estado = "peligro"
+            
+            print(f"\nIteración {i}")
+            print(f"Velocidad: {velocidad:.2f} m/s")
+            print(f"Resistencia (Drag): {drag:.2f} N")
+            print(f"Estado: {mensaje_estado}")
+
+            velocidad += incremento_vel
+            i += 1
+
+    case "D":
         print("Saliendo del programa...")
     case _:
         print("Opción inválida.")
